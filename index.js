@@ -1,20 +1,45 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-const bodyParser = require('body-parser'); //1105
+const bodyParser = require('body-parser'); 
+const mongoose = require('mongoose');
+const {User} = require('./models/User');
+const config = require('./config');
 
-//application/x-ww-form-urlencoded
-app.use(bodyParser.urlencoded({extended: true}));
-//application/json
-app.use(bodyParser.json());
+app.get("/", (req,res) => {
+    const newUser = new User();
+    newUser.email = "interface@naver.com";
+    newUser.name = "interface";
+    newUser.age = 11;
+    newUser
+    .save()
+    .then((user)=>{
+        console.log(user);
+        res.json({
+            message:'User created'
+        });
+    })
+    .catch((err)=>{
+        res.json({
+            message: 'User not created.'
+        });
+    });
+ });
+
+ 
+   
 
 app.listen(port, ()=>console.log("listening on port: " + port +"\t http://localhost:"+ port));
+mongoose.connect(config.mongoURL, {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>console.log("mongoDB connected..."));
 
-app.get('/',(req,res)=>{res.send("hello world!")});
-
-app.post('/register', (req, res) => {
-    //node react inflearn 강의7_ 4 : 12 참고
-// 필요한 정보들을 client에서 가져오면 그것들을 디비에 넣어줌. 
+//app.get('/',(req,res)=>{res.send("hello world!")});
+//페이지 열었을시 나오는 문구
 
 
-})
+
+//application/x-ww-form-urlencoded 요렇게 생긴 데이터를 분석해서 가져올 수 있도록
+app.use(bodyParser.urlencoded({extended: true}));
+//application/json 제이슨 타입을 분석해서 가져오기 
+app.use(bodyParser.json());
+
+
