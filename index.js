@@ -6,6 +6,17 @@ const mongoose = require('mongoose');
 const {User} = require('./models/User');
 const config = require('./config');
 
+
+app.listen(port, ()=>console.log("listening on port: " + port +"\t http://localhost:"+ port));
+//app.get('/',(req,res)=>{res.send("hello world!")});
+//페이지 열었을시 나오는 문구
+mongoose.connect(config.mongoURL, {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>console.log("mongoDB connected..."));
+app.use(bodyParser.urlencoded({extended: true}));
+//application/json 제이슨 타입을 분석해서 가져오기 
+app.use(bodyParser.json());
+
+
+
 app.get("/", (req,res) => {
     const newUser = new User();
     newUser.email = "interface@naver.com";
@@ -20,6 +31,7 @@ app.get("/", (req,res) => {
         });
     })
     .catch((err)=>{
+        console.log(err);
         res.json({
             message: 'User not created.'
         });
@@ -29,17 +41,6 @@ app.get("/", (req,res) => {
  
    
 
-app.listen(port, ()=>console.log("listening on port: " + port +"\t http://localhost:"+ port));
-mongoose.connect(config.mongoURL, {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>console.log("mongoDB connected..."));
-
-//app.get('/',(req,res)=>{res.send("hello world!")});
-//페이지 열었을시 나오는 문구
-
-
-
 //application/x-ww-form-urlencoded 요렇게 생긴 데이터를 분석해서 가져올 수 있도록
-app.use(bodyParser.urlencoded({extended: true}));
-//application/json 제이슨 타입을 분석해서 가져오기 
-app.use(bodyParser.json());
 
 

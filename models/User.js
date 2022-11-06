@@ -16,6 +16,6 @@ const userSchema = new Schema ({
     timestamps: true
 }
 );
-
-module.exports = mongoose.model('User', userSchema);
-//user model aksemfa
+const User =  mongoose.model('User', userSchema);
+module.exports = { User }
+//user model 만들고 exports해줌
