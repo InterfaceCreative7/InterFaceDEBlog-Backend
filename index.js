@@ -33,7 +33,7 @@ app.listen(port, ()=>console.log("listening on port: " + port +"\t http://localh
 mongoose.connect(config.mongoURL, {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>console.log("mongoDB connected..."));
 
 //app.get('/',(req,res)=>{res.send("hello world!")});
-//페이지 열었을시 나오는 문구
+
 
 
 
