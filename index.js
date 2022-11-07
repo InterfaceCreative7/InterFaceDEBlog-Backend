@@ -39,19 +39,23 @@ app.get("/", (req,res) => {
     });
  });
 
- 
-app.get('/finddata',(req,res)=>{//요청에서 검색할 기준을 Pivot으로 받음
+
+ //몇몇의 메소드에서 사용될 함수이므로 따로 만들어 주었다.
+let findAll = async (req, res)=> {//요청에서 검색할 기준을 Pivot으로 받음
     console.log("get data with keyword")
     //req.body는 다음과 같음.
     /*
     {
-        "Pivot": "{\"<검색할 태그>\" : <태그의 값>}"
+        "key":<검색할 키값>
+        "value":<검색할 내용>
     }
     */
-    Pivot = JSON.parse(req.body.Pivot);
     //전달받은 정보를 JSON형식으로 변환
+    pi = "{"+ "\"" + req.body.key + "\"" + ':' + req.body.value + "}";
+    console.log(pi);
+    pi_JSON = JSON.parse(pi);
     
-    User.findOne(Pivot, function(err, User){
+    User.find(pi_JSON, function(err, User){
         if(err){
             console.log(err);
         }else if(!User){
@@ -61,10 +65,9 @@ app.get('/finddata',(req,res)=>{//요청에서 검색할 기준을 Pivot으로 �
             console.log(User);
             res.json(User);//찾았다면 해당 정보의 전체를 json 형식으로 전달함
         }
+        //return res;
     })
-    return res;
-})
-
+}
+app.get('/findall',findAll);
 //application/x-ww-form-urlencoded 요렇게 생긴 데이터를 분석해서 가져올 수 있도록
-
 
