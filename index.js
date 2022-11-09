@@ -13,32 +13,42 @@ app.listen(port, ()=>console.log("listening on port: " + port +"\t http://localh
 //app.get('/',(req,res)=>{res.send("hello world!")});
 //페이지 열었을시 나오는 문구
 mongoose.connect(config.mongoURL, {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>console.log("mongoDB connected..."));
+
+
+//
 app.use(bodyParser.urlencoded({extended: true}));
-//application/json 제이슨 타입을 분석해서 가져오기 
 app.use(bodyParser.json());
+
+
 
 
 
 app.get("/", (req,res) => {
     const newUser = new User();
-    newUser.email = "interface@naver.com";
-    newUser.name = "interface";
-    newUser.age = 11;
+    newUser.title = "interface";
+    newUser.blogBody;
+    newUser.tag;
+    newUser.imageUrl;
+    newUser.writedate; 
+    newUser.writername = "interface";
     newUser
     .save()
     .then((user)=>{
         console.log(user);
         res.json({
-            message:'User created'
+            message:'Blog created'
         });
+        console
     })
     .catch((err)=>{
         console.log(err);
         res.json({
-            message: 'User not created.'
+            message: 'Blog not created.'
         });
     });
  });
+app.get('/about',(req,res)=>{
+     res.send("about page")});
 
 
  //몇몇의 메소드에서 사용될 함수이므로 따로 만들어 주었다.
@@ -76,6 +86,7 @@ let findAll = async (req, res)=> {//요청에서 검색할 기준을 Pivot으로
 }
 app.get('/findall',findAll);
 //application/x-ww-form-urlencoded 요렇게 생긴 데이터를 분석해서 가져올 수 있도록
+
 
 let modifyData = async (req, res)=>{
 
@@ -131,6 +142,8 @@ app.get('/modify', (req,res)=>{
         }
     })
 })
+
+
 
 /*
 {"_id":{"$oid":"63677d7c7ec713cb3049cf4d"},"email":"interface@naver.com","name":"interface","age":{"$numberInt":"11"},"createdAt":{"$date":{"$numberLong":"1667726716115"}},"updatedAt":{"$date":{"$numberLong":"1667726716115"}},"__v":{"$numberInt":"0"}}
