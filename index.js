@@ -25,6 +25,7 @@ app.post("/about/comments/upload",(req,res)=>{//커멘트를 DB에 저장함. �
     const newComment = new Comment();
     newComment.body = req.body.body;
     newComment.writername = req.body.writername;
+    newComment.dataType = "comment";
 
     newComment
     .save()//comment를 저장하고
@@ -68,9 +69,19 @@ app.get("/about/comments/findall",(req,res)=>{
         })
     }
 })
-
-
-
+app.delete('/about/comments/clear',async (req,res)=>{
+    Comment.deleteMany({},(err, User)=>{//req에서 _id값을 받아옴.
+        if(err){
+            console.log(err);
+        }else if(!User){
+            console.log("no such data");//데이터를 찾지 못하면 null을 전송함
+            res.json(null);
+        }else{
+            console.log(User);
+            res.json(User);//찾았다면 해당 정보의 전체를 json 형식으로 전달함
+        }
+    });
+})
 
 //User
 app.post("/posts/upload", (req,res) => {//새로운 post를 만드는 기능이므로 post메소드를 이용한다.
@@ -80,6 +91,7 @@ app.post("/posts/upload", (req,res) => {//새로운 post를 만드는 기능이�
     newUser.tag = req.body.teg;
     newUser.imageUrl = req.body.imageUrl;
     newUser.writername = req.body.writername;
+    newUser.dataType = "User";
     newUser
     .save()
     .then((user)=>{

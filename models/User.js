@@ -10,7 +10,8 @@ const userSchema = new Schema ({//제목 본문 태그 표지이미지 날짜 �
     tag: {type: String, default : '' },
     imageUrl: {type : String, default : 'https://www.google.com'},
     writedate: { type: Date, default: Date.now },
-    writername: String
+    writername: String,
+    dataType : String
 },
 {
     timestamps: true
