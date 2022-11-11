@@ -63,16 +63,17 @@ let findAll = async (req, res)=> {//요청에서 검색할 기준을 Pivot으로
     let pi;
     
     pi = { [req.body.key]: req.body.value};//전달받은 정보를 사용해 JSON타입의 데이터를 만듦
-    console.log(pi);
+ 
     if(req.body.key == undefined || req.body.value == undefined){//req에서 정확하게 입력받았는지 확인한다.
         console.log("incorrect formet");//둘 중 하나라도 undefined, 즉 올바르지 못하다면 find를 실행하지 않는다.
         res.json(null);
     }
     else{
         User.find(pi, function(err, User){
+            
             if(err){
                 console.log(err);
-            }else if(User._id==null){
+            }else if(User[0] == null){
                 console.log("no such data");//데이터를 찾지 못하면 null을 전송함
                 res.json(null);
             }else{
@@ -87,7 +88,7 @@ let findAll = async (req, res)=> {//요청에서 검색할 기준을 Pivot으로
 app.get('/posts/findall',findAll);//원하는 post를 찾는 기능이므로 get메소드를 사용함.
 //application/x-ww-form-urlencoded 요렇게 생긴 데이터를 분석해서 가져올 수 있도록
 
-app.put('/posts/modify', async (req,res)=>{//특정 post를 수정하는 기능이므로 put메소드를 사용함.
+app.patch('/posts/modify', async (req,res)=>{//특정 post를 수정하는 기능이므로 put메소드를 사용함.
    
     /*
     body 형식
@@ -140,6 +141,35 @@ app.delete('/posts/delete', async (req,res)=>{//id값을 받아서 자료를 삭
         }
     })
 }
+})
+
+app.delete('/posts/clear',async (req,res)=>{
+    User.deleteMany({},(err, User)=>{//req에서 _id값을 받아옴.
+        if(err){
+            console.log(err);
+        }else if(!User){
+            console.log("no such data");//데이터를 찾지 못하면 null을 전송함
+            res.json(null);
+        }else{
+            console.log(User);
+            res.json(User);//찾았다면 해당 정보의 전체를 json 형식으로 전달함
+        }
+    });
+})
+
+let add = function(i){
+    const newUser = new User();
+    newUser.title = i.toString();
+    newUser.blogBody = i.toString() + 100;
+    newUser.writername = i.toString() + 200;
+    newUser
+    .save()
+}
+app.post('/test/add100',async (req,res)=>{
+    for(i = 0; i < 100; i++){
+        add(i);
+    }
+    res.json(null);
 })
 
 
