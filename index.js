@@ -4,6 +4,7 @@ const port = 3000;
 const bodyParser = require('body-parser'); 
 const mongoose = require('mongoose');
 const {User} = require('./models/User');
+const { Comment } = require('./models/Comment.js');
 const config = require('./config');
 const req = require("express/lib/request");
 const { json } = require("body-parser");
@@ -19,10 +20,59 @@ mongoose.connect(config.mongoURL, {useNewUrlParser: true, useUnifiedTopology: tr
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+//Comment
+app.post("/about/comments/upload",(req,res)=>{//커멘트를 DB에 저장함. 또다른 스키마 Comment를 사용
+    const newComment = new Comment();
+    newComment.body = req.body.body;
+    newComment.writername = req.body.writername;
+
+    newComment
+    .save()//comment를 저장하고
+    .then((comment)=>{
+        console.log(comment);//성공하면
+        res.json({
+            message:'Comment created'
+        });
+        console
+    })
+    .catch((err)=>{//실패하면
+        console.log(err);
+        res.json({
+            message: 'Comment not created.'
+        });
+    });
+
+});
+
+app.get("/about/comments/findall",(req,res)=>{
+    pi = { [req.body.key]: req.body.value};//전달받은 정보를 사용해 JSON타입의 데이터를 만듦
+    console.log(pi);
+    if(req.body.key == undefined || req.body.value == undefined){//req에서 정확하게 입력받았는지 확인한다.
+        console.log("incorrect formet");//둘 중 하나라도 undefined, 즉 올바르지 못하다면 find를 실행하지 않는다.
+        res.json(null);
+    }
+    else{
+        Comment.find(pi, function(err, comment){
+            
+            if(err){
+                console.log(err);
+            }else if(comment[0] == null){
+                console.log("no such data");//데이터를 찾지 못하면 null을 전송함
+                res.json(null);
+            }else{
+                console.log("find");
+                console.log(comment);
+                res.json(comment);//찾았다면 해당 정보의 전체를 json 형식으로 전달함
+            }
+            //return res;
+        })
+    }
+})
 
 
 
 
+//User
 app.post("/posts/upload", (req,res) => {//새로운 post를 만드는 기능이므로 post메소드를 이용한다.
     const newUser = new User();
     newUser.title = req.body.title;
@@ -46,8 +96,9 @@ app.post("/posts/upload", (req,res) => {//새로운 post를 만드는 기능이�
         });
     });
  });
-app.get('/posts/about',(req,res)=>{//존재하는 post를 불러오는 것이므로 get메소드를 사용한다.
-     res.send("about page")});
+app.get('/about/addcomment',(req,res)=>{//존재하는 post를 불러오는 것이므로 get메소드를 사용한다.
+
+    });
 
 
  //몇몇의 메소드에서 사용될 함수이므로 따로 만들어 주었다.
