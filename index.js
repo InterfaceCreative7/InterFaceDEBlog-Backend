@@ -19,7 +19,9 @@ mongoose.connect(config.mongoURL, {useNewUrlParser: true, useUnifiedTopology: tr
 //
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-
+app.post('/',(req,res)=>{
+    res.json("connected!");
+})
 //Comment
 app.post("/about/comments/upload",(req,res)=>{//커멘트를 DB에 저장함. 또다른 스키마 Comment를 사용
     const newComment = new Comment();
