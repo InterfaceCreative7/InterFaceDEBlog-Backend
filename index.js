@@ -73,6 +73,7 @@ app.delete('/about/comments/clear',async (req,res)=>{
     Comment.deleteMany({},(err, User)=>{//req에서 _id값을 받아옴.
         if(err){
             console.log(err);
+            res.json(err);
         }else if(!User){
             console.log("no such data");//데이터를 찾지 못하면 null을 전송함
             res.json(null);
@@ -132,11 +133,10 @@ let findAll = async (req, res)=> {//요청에서 검색할 기준을 Pivot으로
         res.json(null);
     }
     else{
-        User.find(pi, function(err, User){
+        User.find(pi)
+        .then((User)=>{
             
-            if(err){
-                console.log(err);
-            }else if(User[0] == null){
+            if(User[0] == null){
                 console.log("no such data");//데이터를 찾지 못하면 null을 전송함
                 res.json(null);
             }else{
@@ -145,6 +145,10 @@ let findAll = async (req, res)=> {//요청에서 검색할 기준을 Pivot으로
                 res.json(User);//찾았다면 해당 정보의 전체를 json 형식으로 전달함
             }
             //return res;
+        })
+        .catch((err)=>{
+            console.log(err);
+            res.json(err);
         })
     }
 }
@@ -173,18 +177,21 @@ app.patch('/posts/modify', async (req,res)=>{//특정 post를 수정하는 기�
     
     User.updateOne({_id: req.body._id},
         {$set: req.body.mod},
-        {new : true},
-        (err, User)=>{//설정된 태그의 값을 바꿈. 
-            if(err){
-                console.log(err);
-            }else if(!User){
+        {new : true}
+    )
+    .then((User)=>{//설정된 태그의 값을 바꿈. 
+            if(!User){
                 console.log("no such data");//데이터를 찾지 못하면 null을 전송함
                 res.json(null);
             }else{
                 console.log(User);
                 res.json(User);//찾았다면 해당 정보의 전체를 json 형식으로 전달함
         }
-    });
+    })
+    .catch((err)=>{
+        console.log(err);
+        res.json(err);
+    })
 })
 
 app.delete('/posts/delete', async (req,res)=>{//id값을 받아서 자료를 삭제하는 기능이므로 delete메소드를 사용함.
@@ -192,10 +199,9 @@ app.delete('/posts/delete', async (req,res)=>{//id값을 받아서 자료를 삭
     if(req.body._id == undefined)
         return res.json("wrongKey");
     else{
-    User.deleteOne({"_id":req.body._id},(err, User)=>{//req에서 _id값을 받아옴.
-        if(err){
-            console.log(err);
-        }else if(!User){
+    User.deleteOne({"_id":req.body._id})
+    .then((err, User)=>{//req에서 _id값을 받아옴.
+        if(!User){
             console.log("no such data");//데이터를 찾지 못하면 null을 전송함
             res.json(null);
         }else{
@@ -203,21 +209,28 @@ app.delete('/posts/delete', async (req,res)=>{//id값을 받아서 자료를 삭
             res.json(User);//찾았다면 해당 정보의 전체를 json 형식으로 전달함
         }
     })
+    .catch((err)=>{
+        console.log(err);
+        res.json(err);
+    })
 }
 })
 
 app.delete('/posts/clear',async (req,res)=>{
-    User.deleteMany({},(err, User)=>{//req에서 _id값을 받아옴.
-        if(err){
-            console.log(err);
-        }else if(!User){
+    User.deleteMany({})
+    .then((err, User)=>{//req에서 _id값을 받아옴.
+        if(!User){
             console.log("no such data");//데이터를 찾지 못하면 null을 전송함
             res.json(null);
         }else{
             console.log(User);
             res.json(User);//찾았다면 해당 정보의 전체를 json 형식으로 전달함
         }
-    });
+    })
+    .catch((err)=>{
+        console.log(err);
+        res.json(err);
+    })
 })
 
 let add = function(i){
