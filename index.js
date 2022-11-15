@@ -8,7 +8,7 @@ const { Comment } = require('./models/Comment.js');
 const config = require('./config');
 const req = require("express/lib/request");
 const { json } = require("body-parser");
-
+const cors = require('cors')
 
 app.listen(port, ()=>console.log("listening on port: " + port +"\t http://localhost:"+ port));
 //app.get('/',(req,res)=>{res.send("hello world!")});
@@ -19,6 +19,7 @@ mongoose.connect(config.mongoURL, {useNewUrlParser: true, useUnifiedTopology: tr
 //
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cors())
 app.post('/',(req,res)=>{
     res.json("connected!");
 })
