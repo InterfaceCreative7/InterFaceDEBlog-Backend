@@ -49,12 +49,12 @@ app.post("/about/comments/upload",(req,res)=>{//커멘트를 DB에 저장함. �
 
 app.get("/about/comments/findall",(req,res)=>{
 
-    let key = req.param('key');
+    let title = req.param('title');
     let value = req.param('value');
 
-    pi = { [key]: value};//전달받은 정보를 사용해 JSON타입의 데이터를 만듦
+    pi = { [title]: value};//전달받은 정보를 사용해 JSON타입의 데이터를 만듦
     console.log(pi);
-    if(key == undefined || value == undefined){//req에서 정확하게 입력받았는지 확인한다.
+    if(title == undefined || value == undefined){//req에서 정확하게 입력받았는지 확인한다.
         console.log("incorrect formet");//둘 중 하나라도 undefined, 즉 올바르지 못하다면 find를 실행하지 않는다.
         res.json(null);
     }
@@ -98,7 +98,7 @@ app.post("/posts/upload", (req,res) => {//새로운 post를 만드는 기능이�
     newUser.tag = req.body.teg;
     newUser.imageUrl = req.body.imageUrl;
     newUser.writername = req.body.writername;
-    newUser.dataType = "user";
+    newUser.dataType = "User";
     newUser
     .save()
     .then((user)=>{
@@ -126,17 +126,17 @@ let findAll = async (req, res)=> {//요청에서 검색할 기준을 Pivot으로
     //req.body는 다음과 같음.
     /*
     {
-        "key":<검색할 키값>
+        "title":<검색할 키값>
         "value":<검색할 내용>
     }
     */
     let pi;
-    let key = req.param('key');
+    let title = req.param('title');
     let value = req.param('value');
-    pi = { [key]:value};//전달받은 정보를 사용해 JSON타입의 데이터를 만듦
+    pi = { [title]:value};//전달받은 정보를 사용해 JSON타입의 데이터를 만듦
  
-    if(key == undefined ||value == undefined){//req에서 정확하게 입력받았는지 확인한다.
-        console.log(key);//둘 중 하나라도 undefined, 즉 올바르지 못하다면 find를 실행하지 않는다.
+    if(title == undefined ||value == undefined){//req에서 정확하게 입력받았는지 확인한다.
+        console.log(title);//둘 중 하나라도 undefined, 즉 올바르지 못하다면 find를 실행하지 않는다.
         res.json("errer");
     }
     else{
