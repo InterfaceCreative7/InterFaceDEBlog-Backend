@@ -48,10 +48,10 @@ app.post("/about/comments/upload",(req,res)=>{//커멘트를 DB에 저장함. �
 
 });
 
-app.get("/about/comments/findall",(req,res)=>{
+app.get("/about/comments/findall/:title/:value",(req,res)=>{
 
-    let title = req.param('title');
-    let value = req.param('value');
+    let title = req.params.title;
+    let value = req.params.value;
 
     pi = { [title]: value};//전달받은 정보를 사용해 JSON타입의 데이터를 만듦
     console.log(pi);
@@ -90,7 +90,20 @@ app.delete('/about/comments/clear',async (req,res)=>{
         }
     });
 })
-
+app.delete('/about/comments/delete/:_id',async (req,res)=>{
+    Comment.findByIdAndDelete(req.params._id,(err, User)=>{//req에서 _id값을 받아옴.
+        if(err){
+            console.log(err);
+            res.json(err);
+        }else if(!User){
+            console.log("no such data");//데이터를 찾지 못하면 null을 전송함
+            res.json(null);
+        }else{
+            console.log(User);
+            res.json(User);//찾았다면 해당 정보의 전체를 json 형식으로 전달함
+        }
+    });
+})
 //User
 app.post("/posts/upload", (req,res) => {//새로운 post를 만드는 기능이므로 post메소드를 이용한다.
     const newUser = new User();
@@ -116,10 +129,6 @@ app.post("/posts/upload", (req,res) => {//새로운 post를 만드는 기능이�
         });
     });
  });
-app.get('/about/addcomment',(req,res)=>{//존재하는 post를 불러오는 것이므로 get메소드를 사용한다.
-
-    });
-
 
  //몇몇의 메소드에서 사용될 함수이므로 따로 만들어 주었다.
 let findAll = async (req, res)=> {//요청에서 검색할 기준을 Pivot으로 받음
