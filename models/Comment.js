@@ -5,7 +5,8 @@ const userSchema = new Schema ({//제목 본문 태그 표지이미지 날짜 �
     body : String,
     writername: { type: String },
     date: {type: Date, default: Date.now},
-    dataType: String
+    dataType: String,
+    docType: String
 },
 {
     timestamps: true

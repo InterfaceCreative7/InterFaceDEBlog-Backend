@@ -30,7 +30,8 @@ app.post("/about/comments/upload",(req,res)=>{//커멘트를 DB에 저장함. �
     const newComment = new Comment();
     newComment.body = req.body.body;
     newComment.writername = req.body.writername;
-    newComment.dataType = req.body.dataType;
+    newComment.dataType = "comment"; 
+    newComment.docType = req.body.docType;
 
     newComment
     .save()//comment를 저장하고
@@ -50,10 +51,10 @@ app.post("/about/comments/upload",(req,res)=>{//커멘트를 DB에 저장함. �
 
 });
 
-app.get("/about/comments/findall/:title/:value",(req,res)=>{
+app.get("/about/comments/findall",(req,res)=>{
 
-    let title = req.params.title;
-    let value = req.params.value;
+    let title = req.param('title');
+    let value = req.param('value');
 
     pi = { [title]: value};//전달받은 정보를 사용해 JSON타입의 데이터를 만듦
     console.log(pi);
