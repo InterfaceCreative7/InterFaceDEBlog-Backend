@@ -19,16 +19,18 @@ mongoose.connect(config.mongoURL, {useNewUrlParser: true, useUnifiedTopology: tr
 //
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(cors())
-app.post('/',(req,res)=>{
+app.use(cors());
+
+app.get('/',(req,res)=>{
     res.json("connected!");
 })
+
 //Comment
 app.post("/about/comments/upload",(req,res)=>{//커멘트를 DB에 저장함. 또다른 스키마 Comment를 사용
     const newComment = new Comment();
     newComment.body = req.body.body;
     newComment.writername = req.body.writername;
-    newComment.dataType = "comment";
+    newComment.dataType = req.body.dataType;
 
     newComment
     .save()//comment를 저장하고
