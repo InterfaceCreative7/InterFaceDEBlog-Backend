@@ -108,14 +108,21 @@ app.delete('/about/comments/delete/:_id',async (req,res)=>{
     });
 })
 //User
+let sizePost = 0;
 app.post("/posts/upload", (req,res) => {//새로운 post를 만드는 기능이므로 post메소드를 이용한다.
+    let Qurry;
+    Qurry = User.find();//User의 모든 정보를 찾는다
     const newUser = new User();
     newUser.title = req.body.title;
     newUser.blogBody = req.body.blogBody;
-    newUser.tag = req.body.teg;
+    newUser.tag = req.body.tag;
     newUser.imageUrl = req.body.imageUrl;
     newUser.writername = req.body.writername;
     newUser.dataType = "User";
+    Qurry.count( (err, count)=>{//그 정보의 갯수를 세어준다
+        newUser.index = count;
+    });
+    
     newUser
     .save()
     .then((user)=>{
@@ -123,7 +130,7 @@ app.post("/posts/upload", (req,res) => {//새로운 post를 만드는 기능이�
         res.json({
             message:'Post created'
         });
-        console
+        
     })
     .catch((err)=>{
         console.log(err);
