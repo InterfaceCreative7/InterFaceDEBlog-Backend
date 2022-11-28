@@ -1,1 +1,1 @@
-werb:node
+web: node index.js
