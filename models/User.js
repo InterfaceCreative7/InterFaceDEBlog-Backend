@@ -7,7 +7,7 @@ const userSchema = new Schema ({//제목 본문 태그 표지이미지 날짜 �
         required:true
     },
     blogBody :  {type : String, default : ''},
-    tag: {type: String, default : '' },
+    tag: [{type: String, default : '' }],
     imageUrl: {type : String, default : 'https://www.google.com'},
     writedate: { type: Date, default: Date.now },
     writername: String,
