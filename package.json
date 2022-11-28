@@ -5,7 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+<<<<<<< Updated upstream
     "dev": "nodemon index.js"
+=======
+    "dev": "nodemon index.js",
+    "heroku-postbuild": "npx webpack",
+    "start": "node index.js"
+    
+>>>>>>> Stashed changes
   },
   "repository": {
     "type": "git",
